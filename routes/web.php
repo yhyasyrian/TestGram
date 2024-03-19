@@ -16,13 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [PostController::class,'index'])->name('home')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,9 +24,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::prefix('/post')->middleware('auth')->group(function () {
-    Route::get('/create', [PostController::class, 'create'])->name('post.create');
-    Route::post('/', [PostController::class, 'store'])->name('post.store');
-    Route::get('/{post:slug}', [PostController::class, 'show'])->name('post.show');
+    Route::controller(PostController::class)->group(function () {
+        Route::get('/create', 'create')->name('post.create');
+        Route::post('/', 'store')->name('post.store');
+        Route::get('/{post:slug}', 'show')->name('post.show');
+        Route::delete('/{post:slug}', 'destroy')->name('post.destroy');
+        Route::get('/edit/{post:slug}', 'edit')->name('post.edit');
+        Route::put('/{post:slug}', 'update')->name('post.update');
+    });
     Route::post('/{post:slug}/comment', [CommentController::class, 'store'])->name('comment.store');
 });
 require __DIR__ . '/auth.php';
