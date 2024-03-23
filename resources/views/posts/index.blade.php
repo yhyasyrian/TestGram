@@ -8,7 +8,15 @@
             </div>
         </div>
         <div class="col-start-9 col-end-13 ">
-            <div class="w-full border-t">asd</div>
+            <div class="w-full flex flex-col gap-y-4">
+                <x-show-user-with-name :user="auth()->user()" />
+                <h2 class="ms-2 font-bold text-gray-500">{{__('Suggestions for you')}}</h2>
+                <ul class="flex flex-col gap-y-4">
+                    @foreach($suggestd_users as $suggestd_user)
+                        <li><x-show-user-with-name :user="$suggestd_user" /></li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 </x-app-layout>

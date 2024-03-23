@@ -11,8 +11,8 @@
     <div class="card-paragraph">
         <a href="" class="font-bold ms-1">{{$post->owner->username}}</a>
         <p class="">{{$post->description}}</p>
-        @if($post->comments->count() > 0)
-            <a class="my-1 font-bold text-sm text-gray-500" href="{{route('post.show',['post'=>$post->slug])}}">{{__('All comments '.$post->comments->count())}}</a>
+        @if($post->comments_count > 0)
+            <a class="my-1 font-bold text-sm text-gray-500" href="{{route('post.show',['post'=>$post->slug])}}">{{__('All comments '.$post->comments_count)}}</a>
         @endif
         <p class="text-gray-400 p-3 text-xs uppercase">
             {{$post->created_at->diffForHumans()}}

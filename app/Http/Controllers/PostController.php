@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Post\CreateRequest;
 use App\Http\Requests\Post\UpdateRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -14,8 +14,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        return view('posts.index',compact('posts'));
+        $posts = Post::with('owner')->withCount('comments')->get();
+        $suggestd_users = DB::table('users')
+            ->where('id', '!=', auth()->id())
+            ->limit(5)
+            ->orderBy(DB::raw('RAND()'))
+            ->select(['username', 'name', 'image'])
+            ->get();
+        return view('posts.index', compact('posts', 'suggestd_users'));
     }
 
     /**
@@ -32,7 +38,7 @@ class PostController extends Controller
     public function store(CreateRequest $request)
     {
         $request->savePost();
-        return back()->with('success',__('success create post'));
+        return back()->with('success', __('success create post'));
     }
 
     /**
@@ -40,7 +46,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show',compact('post'));
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -48,7 +54,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit',compact('post'));
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -57,7 +63,7 @@ class PostController extends Controller
     public function update(UpdateRequest $request, Post $post)
     {
         $request->saveUpdatePost($post);
-        return back()->with('success',__('Done update post'));
+        return back()->with('success', __('Done update post'));
     }
 
     /**
@@ -67,5 +73,11 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect('/');
+    }
+    public function explorer()
+    {
+        $explorer = Post::whereRelation('owner','is_private',false)
+            ->paginate(12);
+        return view('explorer',compact('explorer'));
     }
 }

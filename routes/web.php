@@ -17,11 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PostController::class,'index'])->name('home')->middleware('auth');
+Route::get('/explorer', [PostController::class,'explorer'])->name('explorer');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/user/{user}',fn($user) => "example user")->name('username');
 });
 Route::prefix('/post')->middleware('auth')->group(function () {
     Route::controller(PostController::class)->group(function () {
