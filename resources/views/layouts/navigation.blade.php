@@ -30,12 +30,12 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <div class="flex flex-row gap-x-4">
-                            <img src="{{auth()?->user()?->image ?? asset('Assets/Images/user.svg')}}" alt="{{auth()?->user()?->username ?? "no user"}}"
+                            <img src="{{auth()?->user()?->image() ?? asset('Assets/Images/user.svg')}}" alt="{{auth()?->user()?->username ?? "no user"}}"
                                  class="h-10 w-10 rounded-full">
                         </div>
                     </x-slot>
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('username',['user'=>auth()->user()->username])">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -85,7 +85,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('username',['user'=>auth()->user()->username])">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

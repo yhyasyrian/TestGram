@@ -1,6 +1,10 @@
 <div class="flex flex-row gap-6 items-center">
     <a href="{{route('username',['user'=>$user->username])}}">
-        <img src="{{$user->image}}" class="w-16 h-16 rounded-full bg-gray-300">
+        @if(preg_match('/^(http|https):\/\/\S/',$user->image))
+            <img src="{{$user->image}}" class="w-16 h-16 rounded-full bg-gray-300">
+        @else
+            <img src="{{asset('storage/'.$user->image)}}" class="w-16 h-16 rounded-full bg-gray-300">
+        @endif
     </a>
     <div class="flex flex-col gap-2">
         <h3 class="font-bold">

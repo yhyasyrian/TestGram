@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,15 +16,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', [PostController::class,'index'])->name('home')->middleware('auth');
-Route::get('/explorer', [PostController::class,'explorer'])->name('explorer');
+require __DIR__ . '/auth.php';
+Route::get('/', [PostController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/explorer', [PostController::class, 'explorer'])->name('explorer');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/user/{user}',fn($user) => "example user")->name('username');
+    Route::get('/{user:username}/edit', [UserController::class, 'edit'])->name('profile.edit');
+    Route::get('/{user:username}', [UserController::class, 'show'])->name('username');
+    Route::patch('/{user:username}', [UserController::class, 'update'])->name('profile.update');
 });
 Route::prefix('/post')->middleware('auth')->group(function () {
     Route::controller(PostController::class)->group(function () {
@@ -36,4 +36,3 @@ Route::prefix('/post')->middleware('auth')->group(function () {
     });
     Route::post('/{post:slug}/comment', [CommentController::class, 'store'])->name('comment.store');
 });
-require __DIR__ . '/auth.php';

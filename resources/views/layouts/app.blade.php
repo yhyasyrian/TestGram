@@ -21,14 +21,14 @@
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endif
 
             <!-- Page Content -->
-            <main class="mt-8">
+            <main class="mt-8 max-w-5xl mx-auto md:px-4">
                 @include('layouts.errors')
                 {{ $slot }}
             </main>
