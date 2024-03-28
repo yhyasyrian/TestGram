@@ -38,7 +38,7 @@ class UpdateRequest extends FormRequest
     {
         $data = $this->safe()->collect();
         if ($this->has('image')) {
-            $data['image'] = $this->file('image')->store('users', 'public');
+            $data['image'] = 'storage/'.$this->file('image')->store('users', 'public');
         } else {
             unset($data['image']);
         }

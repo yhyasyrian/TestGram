@@ -30,7 +30,7 @@
                     <div class="col-span-full">
                         <x-input-label for="image">{{__('Photo')}}</x-input-label>
                         <div class="mt-2 flex items-center gap-x-3">
-                            <img src="{{$user->image()}}" class="h-12 w-12 text-gray-300 rounded-full"
+                            <img src="{{asset($user->image)}}" class="h-12 w-12 text-gray-300 rounded-full"
                                  alt="image's {{$user->username}}"/>
                             <x-text-input type="file" name="image" id="image" class="w-full" />
                         </div>

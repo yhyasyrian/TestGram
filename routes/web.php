@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +35,5 @@ Route::prefix('/post')->middleware('auth')->group(function () {
         Route::put('/{post:slug}', 'update')->name('post.update');
     });
     Route::post('/{post:slug}/comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::get('/{post:slug}/like', LikeController::class)->name('like');
 });

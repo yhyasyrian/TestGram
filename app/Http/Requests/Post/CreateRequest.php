@@ -30,7 +30,7 @@ class CreateRequest extends FormRequest
     {
         $result = [
             'description' => $this->get('description') ?? '',
-            'image' => $this->file('image')->store('post','public'),
+            'image' => 'storage/'.$this->file('image')->store('post','public'),
             'slug' => Str::random(64)
         ];
         auth()->user()->posts()->create($result);

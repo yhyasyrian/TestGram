@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Post\CreateRequest;
 use App\Http\Requests\Post\UpdateRequest;
 use App\Models\Post;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -14,7 +16,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('owner')->withCount('comments')->get();
+        //  it's bas if i use relationship with likes tables, in this case i will use (count post) query for check if user liked or no
+        // $posts = Post::with('owner')->withCount('comments')->with('likes')->get();
+        $posts = DB::table('posts')
+        ->join('users', 'users.id', '=', 'posts.user_id')
+        ->leftJoin('comments', 'comments.post_id', '=', 'posts.id')
+        ->leftJoin('likes', function (JoinClause $joinClause) {
+            $joinClause->on('posts.id', '=', 'likes.post_id')->where('likes.user_id', '=', Auth::id());
+        })
+        ->groupBy('posts.id')
+        ->orderBy('posts.created_at', 'desc')
+        ->select($this->arraySelectsTablePost())
+        ->get()
+        ;
         $suggestd_users = DB::table('users')
             ->where('id', '!=', auth()->id())
             ->limit(5)
@@ -23,7 +37,15 @@ class PostController extends Controller
             ->get();
         return view('posts.index', compact('posts', 'suggestd_users'));
     }
-
+    private function arraySelectsTablePost():array
+    {
+        $result = ['posts.id','posts.image','posts.slug','posts.description','posts.created_at'];
+        $result[] = DB::raw("users.username as owner_username");
+        $result[] = DB::raw("users.image as owner_image");
+        $result[] = DB::raw("likes.user_id as user_like");
+        $result[] = DB::raw("COUNT(`comments`.`id`) as `comments_count`");
+        return $result;
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -3,7 +3,7 @@
         @if(preg_match('/^(http|https):\/\/\S/',$user->image))
             <img src="{{$user->image}}" class="w-16 h-16 rounded-full bg-gray-300">
         @else
-            <img src="{{asset('storage/'.$user->image)}}" class="w-16 h-16 rounded-full bg-gray-300">
+            <img src="{{asset($user->image)}}" class="w-16 h-16 rounded-full bg-gray-300">
         @endif
     </a>
     <div class="flex flex-col gap-2">

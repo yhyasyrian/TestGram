@@ -32,7 +32,7 @@ class UpdateRequest extends FormRequest
     {
         $data = ['description' => $this->get('description') ?? ''];
         if ($this->has('image')) {
-            $data['image'] = $this->file('image')->store('post','public');
+            $data['image'] = 'storage/'.$this->file('image')->store('post','public');
         }
         $post->update($data);
     }

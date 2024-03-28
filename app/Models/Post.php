@@ -21,10 +21,8 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
-    public function image():string
+    public function likes()
     {
-        if (preg_match('/^(http|https):\/\/\S/',$this->image))
-            return $this->image;
-        return asset('storage/'.$this->image);
+        return $this->belongsToMany(User::class,'likes');
     }
 }

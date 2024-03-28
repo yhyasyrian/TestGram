@@ -57,10 +57,7 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function image()
-    {
-        if (preg_match('/^(http|https):\/\/\S/', $this->image))
-            return $this->image;
-        return asset('storage/' . $this->image);
+    public function likes() {
+        return $this->belongsToMany(Post::class, 'likes');
     }
 }

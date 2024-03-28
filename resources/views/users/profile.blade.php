@@ -2,7 +2,7 @@
     <div class="grid grid-cols-4 px-4 container mx-auto">
         {{-- user image --}}
         <div class="px-4 col-span-2 md:col-span-1 order-1">
-            <img src="{{$user->image()}}" alt="{{$user->username}}'s photo"
+            <img src="{{asset($user->image)}}" alt="{{$user->username}}'s photo"
                  class="rounded-full w-20 md:w-40 border-neutral-500"/>
         </div>
         {{-- user name and button --}}
@@ -30,7 +30,7 @@
                         {{ $user->posts->count() }}
                     </div>
                     <span class='text-neutral-500 md:text-black'>
-                    {{ $user->posts->count() > 1 ? __('posts') : __('post') }}</span>
+                    {{ $user->posts->count() > 1 ? __(' posts') : __(' post') }}</span>
                 </li>
             </ul>
         </div>
@@ -39,7 +39,7 @@
     <div class="grid sm:grid-cols-2 md:grid-cols-3 md:container mx-auto px-2 gap-4 my-4">
         @foreach($user->posts as $post)
             <a href="{{route('post.show',['post'=>$post->slug])}}">
-                <img src="{{$post->image()}}" alt="" class="w-full object-cover aspect-square rounded-sm">
+                <img src="{{asset($post->image)}}" alt="" class="w-full object-cover aspect-square rounded-sm">
             </a>
         @endforeach
     </div>

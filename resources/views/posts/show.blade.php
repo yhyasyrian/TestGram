@@ -2,7 +2,7 @@
     <div class="max-w-3xl mx-auto h-screen md:grid md:grid-cols-12">
         {{-- Left --}}
         <div class="md:col-span-7 h-screen bg-black flex justify-center items-center">
-            <img src="{{$post->image()}}" alt="{{$post->description}}"
+            <img src="{{asset($post->image)}}" alt="{{$post->description}}"
                  class="mx-auto max-h-screen object-cover">
         </div>
         {{-- Right --}}
@@ -16,6 +16,15 @@
             <x-show-profile-in-post :linkImg="asset($post->owner->image)" :username="$post->owner->username"
                                     :paragraph="$post->description"/>
             @include('comments.show',['comments'=>$post->comments])
+            <div class="p-2">
+                <a href="{{route('like',['post'=>$post->slug])}}">
+                    @if ($post->likes()->where('user_id',auth()->id())->exists())
+                        <x-icon-heart-fill/>
+                    @else
+                        <x-icon-heart/>
+                    @endif
+                </a>
+            </div>
             @include('comments.create',['slug'=>$post->slug])
         </div>
     </div>
